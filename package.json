@@ -1,0 +1,10 @@
+{
+  "name": "ico",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "João Victor Rodrigues",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3"
+  }
+}
