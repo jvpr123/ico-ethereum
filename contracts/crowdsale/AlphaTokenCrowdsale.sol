@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 import "../../@openzeppelin/crowdsale/MintedCrowdsale.sol";
 import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
 
-contract AlphaTokenMintedCrowdsale is MintedCrowdsale {
+contract AlphaTokenCrowdsale is MintedCrowdsale {
     constructor(
         uint256 _rate,
         address payable _wallet,
