@@ -1,23 +1,23 @@
 const { expect } = require("../chai.config");
-
-const BN = require("../utils/BigNumber");
-const hash = require("../utils/Hasher");
-const env = require("../../env");
+const { BN } = require("../utils/BigNumber");
+const { hash } = require("../utils/Hasher");
 
 const AlphaToken = artifacts.require("AlphaToken");
 const AlphaTokenCrowdsale = artifacts.require("AlphaTokenCrowdsale");
+const env = require("../../env");
 
-contract("Alpha Token", ([deployer, account1]) => {
+contract("Alpha Token", ([deployer, wallet, investor]) => {
   const options = { from: deployer };
+
   const DEFAULT_ADMIN_ROLE = "0X00";
   const PAUSER_ROLE = hash("PAUSER_ROLE");
   const MINTER_ROLE = hash("MINTER_ROLE");
 
   beforeEach(async () => {
     this.token = await AlphaToken.new(env.TOKEN_NAME, env.TOKEN_SYMBOL);
-    this.crowdSale = await AlphaTokenCrowdsale.new(
+    this.crowdsale = await AlphaTokenCrowdsale.new(
       env.TOKEN_RATE,
-      deployer,
+      wallet,
       this.token.address
     );
   });
@@ -54,19 +54,19 @@ contract("Alpha Token", ([deployer, account1]) => {
     });
 
     it("should allow deployer to grant a ROLE to an address", async () => {
-      await this.token.grantRole(MINTER_ROLE, this.crowdSale.address, options);
+      await this.token.grantRole(MINTER_ROLE, this.crowdsale.address, options);
 
       return expect(
-        this.token.hasRole(MINTER_ROLE, this.crowdSale.address)
+        this.token.hasRole(MINTER_ROLE, this.crowdsale.address)
       ).to.eventually.be.equal(true);
     });
 
     it("should allow deployer to revoke a ROLE from an address", async () => {
-      await this.token.grantRole(MINTER_ROLE, this.crowdSale.address, options);
-      await this.token.revokeRole(MINTER_ROLE, this.crowdSale.address, options);
+      await this.token.grantRole(MINTER_ROLE, this.crowdsale.address, options);
+      await this.token.revokeRole(MINTER_ROLE, this.crowdsale.address, options);
 
       return expect(
-        this.token.hasRole(MINTER_ROLE, this.crowdSale.address)
+        this.token.hasRole(MINTER_ROLE, this.crowdsale.address)
       ).to.eventually.be.equal(false);
     });
 
@@ -80,7 +80,7 @@ contract("Alpha Token", ([deployer, account1]) => {
 
     it("should not allow an account to renounce a ROLE granted to another address", async () => {
       return expect(
-        this.token.renounceRole(MINTER_ROLE, this.crowdSale.address, options)
+        this.token.renounceRole(MINTER_ROLE, this.crowdsale.address, options)
       ).to.eventually.be.rejected;
     });
   });
@@ -102,7 +102,7 @@ contract("Alpha Token", ([deployer, account1]) => {
     it("should not allow a transaction when contract is paused", async () => {
       await this.token.pause(options);
 
-      expect(this.token.grantRole(MINTER_ROLE, account1, options)).to.eventually
+      expect(this.token.grantRole(MINTER_ROLE, investor, options)).to.eventually
         .be.rejected;
     });
   });

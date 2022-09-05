@@ -4,4 +4,4 @@ const BN = (value) => {
   return web3.utils.toBN(value);
 };
 
-module.exports = BN;
+module.exports = { BN };
