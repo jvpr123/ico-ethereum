@@ -78,6 +78,13 @@ module.exports = {
 
   // Set default mocha options here, use special reporters, etc.
   mocha: {
+    reporter: "eth-gas-reporter",
+    reporterOptions: {
+      token: "ETH",
+      gasPriceApi:
+        "https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=YourApiKeyToken",
+    },
+
     // timeout: 100000
   },
 
