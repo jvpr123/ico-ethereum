@@ -1,6 +1,7 @@
 const { expect } = require("../chai.config");
 const { BN } = require("../utils/BigNumber");
 const { hash } = require("../utils/Hasher");
+const { toWei } = require("../utils/WeiConverter");
 
 const BetaToken = artifacts.require("BetaToken");
 const BetaTokenCrowdsale = artifacts.require("BetaTokenCrowdsale");
@@ -18,7 +19,8 @@ contract("Beta Token", ([deployer, wallet, investor]) => {
     this.crowdsale = await BetaTokenCrowdsale.new(
       env.TOKEN_RATE,
       wallet,
-      this.token.address
+      this.token.address,
+      toWei(env.TOKEN_CAP)
     );
   });
 

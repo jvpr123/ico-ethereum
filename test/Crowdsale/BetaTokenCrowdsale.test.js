@@ -16,7 +16,8 @@ contract("BetaTokenCrowdsale", ([deployer, wallet, investor]) => {
     this.crowdsale = await BetaTokenCrowdsale.new(
       env.TOKEN_RATE,
       wallet,
-      this.token.address
+      this.token.address,
+      toWei(env.TOKEN_CAP)
     );
 
     await this.token.grantRole(MINTER_ROLE, this.crowdsale.address, {
@@ -38,6 +39,12 @@ contract("BetaTokenCrowdsale", ([deployer, wallet, investor]) => {
     it("should track the correct token address", async () => {
       return expect(this.crowdsale.token()).to.eventually.be.equal(
         this.token.address
+      );
+    });
+
+    it("should track the correct hard-cap value", async () => {
+      return expect(this.crowdsale.cap()).to.eventually.be.a.bignumber.equal(
+        toWei(env.TOKEN_CAP)
       );
     });
   });
@@ -73,6 +80,28 @@ contract("BetaTokenCrowdsale", ([deployer, wallet, investor]) => {
       return expect(
         this.crowdsale.weiRaised()
       ).to.eventually.be.a.bignumber.equal(intialWeRaised + finalWeiRaised);
+    });
+  });
+
+  describe("Capping features:", async () => {
+    it("should return false when hard-cap has not been reached", async () => {
+      expect(this.crowdsale.capReached()).to.eventually.be.false;
+    });
+
+    it("should return true when hard-cap has been reached", async () => {
+      await this.crowdsale.sendTransaction({
+        from: investor,
+        value: toWei(env.TOKEN_CAP),
+      });
+      expect(this.crowdsale.capReached()).to.eventually.be.true;
+    });
+
+    it("should not allow tokens purchase after hard-cap has been reached", async () => {
+      await this.crowdsale.sendTransaction({
+        from: investor,
+        value: toWei(env.TOKEN_CAP),
+      });
+      expect(this.crowdsale.sendTransaction(options)).to.eventually.be.rejected;
     });
   });
 });
