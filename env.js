@@ -1,6 +1,7 @@
 module.exports = {
-  TOKEN_NAME: "Alpha Token",
-  TOKEN_SYMBOL: "ALT",
+  TOKEN_NAME: "Beta Token",
+  TOKEN_SYMBOL: "BTK",
   TOKEN_DECIMALS: 18,
   TOKEN_RATE: 1,
+  TOKEN_CAP: 200,
 };

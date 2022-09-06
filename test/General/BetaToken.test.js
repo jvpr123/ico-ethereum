@@ -2,11 +2,11 @@ const { expect } = require("../chai.config");
 const { BN } = require("../utils/BigNumber");
 const { hash } = require("../utils/Hasher");
 
-const AlphaToken = artifacts.require("AlphaToken");
-const AlphaTokenCrowdsale = artifacts.require("AlphaTokenCrowdsale");
+const BetaToken = artifacts.require("BetaToken");
+const BetaTokenCrowdsale = artifacts.require("BetaTokenCrowdsale");
 const env = require("../../env");
 
-contract("Alpha Token", ([deployer, wallet, investor]) => {
+contract("Beta Token", ([deployer, wallet, investor]) => {
   const options = { from: deployer };
 
   const DEFAULT_ADMIN_ROLE = "0X00";
@@ -14,8 +14,8 @@ contract("Alpha Token", ([deployer, wallet, investor]) => {
   const MINTER_ROLE = hash("MINTER_ROLE");
 
   beforeEach(async () => {
-    this.token = await AlphaToken.new(env.TOKEN_NAME, env.TOKEN_SYMBOL);
-    this.crowdsale = await AlphaTokenCrowdsale.new(
+    this.token = await BetaToken.new(env.TOKEN_NAME, env.TOKEN_SYMBOL);
+    this.crowdsale = await BetaTokenCrowdsale.new(
       env.TOKEN_RATE,
       wallet,
       this.token.address

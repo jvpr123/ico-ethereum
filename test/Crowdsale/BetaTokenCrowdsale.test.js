@@ -3,17 +3,17 @@ const { BN } = require("../utils/BigNumber");
 const { hash } = require("../utils/Hasher");
 const { toWei } = require("../utils/WeiConverter");
 
-const AlphaTokenCrowdsale = artifacts.require("AlphaTokenCrowdsale.sol");
-const AlphaToken = artifacts.require("AlphaToken.sol");
+const BetaTokenCrowdsale = artifacts.require("BetaTokenCrowdsale.sol");
+const BetaToken = artifacts.require("BetaToken.sol");
 const env = require("../../env");
 
-contract("AlphaTokenCrowdsale", ([deployer, wallet, investor]) => {
+contract("BetaTokenCrowdsale", ([deployer, wallet, investor]) => {
   const MINTER_ROLE = hash("MINTER_ROLE");
   const options = { from: investor, value: toWei(1) };
 
   beforeEach(async () => {
-    this.token = await AlphaToken.new(env.TOKEN_NAME, env.TOKEN_SYMBOL);
-    this.crowdsale = await AlphaTokenCrowdsale.new(
+    this.token = await BetaToken.new(env.TOKEN_NAME, env.TOKEN_SYMBOL);
+    this.crowdsale = await BetaTokenCrowdsale.new(
       env.TOKEN_RATE,
       wallet,
       this.token.address
