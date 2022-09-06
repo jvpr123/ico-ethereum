@@ -19,8 +19,10 @@ contract("Beta Token", ([deployer, wallet, investor]) => {
     this.crowdsale = await BetaTokenCrowdsale.new(
       env.TOKEN_RATE,
       wallet,
-      this.token.address,
-      toWei(env.TOKEN_CAP)
+      env.TOKEN_CAP,
+      env.INDIVIDUAL_MIN_CAP,
+      env.INDIVIDUAL_MAX_CAP,
+      this.token.address
     );
   });
 
