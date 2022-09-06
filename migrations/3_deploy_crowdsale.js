@@ -9,6 +9,7 @@ module.exports = async (deployer) => {
     BetaTokenCrowdsale,
     env.TOKEN_RATE,
     wallet,
-    BetaToken.address
+    BetaToken.address,
+    env.TOKEN_CAP
   );
 };
