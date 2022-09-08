@@ -13,5 +13,10 @@
     "chai-bn": "^0.3.1",
     "eth-gas-reporter": "^0.2.25",
     "web3": "^1.7.5"
+  },
+  "scripts": {
+    "start:quiet": "ganache --logging.quiet",
+    "start:verbose": "ganache --logging.verbose",
+    "test": "truffle test"
   }
 }

@@ -14,6 +14,7 @@ contract MintedCrowdsale is Crowdsale {
 
     function _deliverTokens(address beneficiary, uint256 tokenAmount)
         internal
+        virtual
         override(Crowdsale)
     {
         ERC20PresetMinterPauser(address(token())).mint(

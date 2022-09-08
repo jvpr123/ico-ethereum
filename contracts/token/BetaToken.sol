@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
 
-contract AlphaToken is ERC20PresetMinterPauser {
+contract BetaToken is ERC20PresetMinterPauser {
     constructor(string memory _name, string memory _symbol)
         ERC20PresetMinterPauser(_name, _symbol)
     {}
