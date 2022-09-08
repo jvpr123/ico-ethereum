@@ -7,7 +7,7 @@ import "../@openzeppelin/crowdsale/CappedCrowdsale.sol";
 import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract BetaTokenCrowdsale is Crowdsale, MintedCrowdsale, CappedCrowdsale {
+contract GammaTokenCrowdsale is Crowdsale, MintedCrowdsale, CappedCrowdsale {
     using SafeMath for uint256;
 
     uint256 public _minIndividualCap;
@@ -59,11 +59,11 @@ contract BetaTokenCrowdsale is Crowdsale, MintedCrowdsale, CappedCrowdsale {
 
         require(
             _contributions[beneficiary].add(weiAmount) >= _minIndividualCap,
-            "BetaTokenCrowdsale: Contribution value is lower then minimum allowed"
+            "GammaTokenCrowdsale: Contribution value is lower then minimum allowed"
         );
         require(
             _contributions[beneficiary].add(weiAmount) <= _maxIndividualCap,
-            "BetaTokenCrowdsale: Contribution value is greater then maximum allowed"
+            "GammaTokenCrowdsale: Contribution value is greater then maximum allowed"
         );
     }
 

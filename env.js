@@ -2,7 +2,7 @@ const { BN } = require("./test/utils/BigNumber");
 const { toWei } = require("./test/utils/WeiConverter");
 
 module.exports = {
-  TOKEN_NAME: "Beta Token",
+  TOKEN_NAME: "Gamma Token",
   TOKEN_SYMBOL: "BTK",
   TOKEN_DECIMALS: BN(18),
   TOKEN_RATE: BN(1),

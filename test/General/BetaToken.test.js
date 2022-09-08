@@ -3,11 +3,11 @@ const { BN } = require("../utils/BigNumber");
 const { hash } = require("../utils/Hasher");
 const { toWei } = require("../utils/WeiConverter");
 
-const BetaToken = artifacts.require("BetaToken");
-const BetaTokenCrowdsale = artifacts.require("BetaTokenCrowdsale");
+const GammaToken = artifacts.require("GammaToken");
+const GammaTokenCrowdsale = artifacts.require("GammaTokenCrowdsale");
 const env = require("../../env");
 
-contract("Beta Token", ([deployer, wallet, investor]) => {
+contract("Gamma Token", ([deployer, wallet, investor]) => {
   const options = { from: deployer };
 
   const DEFAULT_ADMIN_ROLE = "0X00";
@@ -15,8 +15,8 @@ contract("Beta Token", ([deployer, wallet, investor]) => {
   const MINTER_ROLE = hash("MINTER_ROLE");
 
   beforeEach(async () => {
-    this.token = await BetaToken.new(env.TOKEN_NAME, env.TOKEN_SYMBOL);
-    this.crowdsale = await BetaTokenCrowdsale.new(
+    this.token = await GammaToken.new(env.TOKEN_NAME, env.TOKEN_SYMBOL);
+    this.crowdsale = await GammaTokenCrowdsale.new(
       env.TOKEN_RATE,
       wallet,
       env.TOKEN_CAP,
