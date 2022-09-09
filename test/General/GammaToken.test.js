@@ -1,11 +1,10 @@
-const { expect } = require("../chai.config");
-const { BN } = require("../utils/BigNumber");
-const { hash } = require("../utils/Hasher");
-const { toWei } = require("../utils/WeiConverter");
-
-const GammaToken = artifacts.require("GammaToken");
-const GammaTokenCrowdsale = artifacts.require("GammaTokenCrowdsale");
 const env = require("../../env");
+
+const { expect } = require("../chai.config");
+const { time } = require("@openzeppelin/test-helpers");
+const { hash } = require("../utils/helpers/Hasher");
+const { makeERC20Token } = require("../utils/factories/TokenFactory");
+const { makeCrowdsale } = require("../utils/factories/CrowdsaleFactory");
 
 contract("Gamma Token", ([deployer, wallet, investor]) => {
   const options = { from: deployer };
@@ -15,14 +14,19 @@ contract("Gamma Token", ([deployer, wallet, investor]) => {
   const MINTER_ROLE = hash("MINTER_ROLE");
 
   beforeEach(async () => {
-    this.token = await GammaToken.new(env.TOKEN_NAME, env.TOKEN_SYMBOL);
-    this.crowdsale = await GammaTokenCrowdsale.new(
-      env.TOKEN_RATE,
+    const latestBlock = await web3.eth.getBlock("latest");
+
+    this.openingTime =
+      latestBlock.timestamp + time.duration.weeks(1).toNumber();
+    this.closingTime =
+      latestBlock.timestamp + time.duration.weeks(2).toNumber();
+
+    this.token = await makeERC20Token();
+    this.crowdsale = await makeCrowdsale(
+      this.token,
       wallet,
-      env.TOKEN_CAP,
-      env.INDIVIDUAL_MIN_CAP,
-      env.INDIVIDUAL_MAX_CAP,
-      this.token.address
+      this.openingTime,
+      this.closingTime
     );
   });
 
@@ -38,8 +42,8 @@ contract("Gamma Token", ([deployer, wallet, investor]) => {
     });
 
     it("should return the correct token decimals", async () => {
-      return expect(this.token.decimals()).to.eventually.be.a.bignumber.equal(
-        BN(env.TOKEN_DECIMALS)
+      return expect(await this.token.decimals()).to.be.a.bignumber.equal(
+        env.TOKEN_DECIMALS
       );
     });
   });
