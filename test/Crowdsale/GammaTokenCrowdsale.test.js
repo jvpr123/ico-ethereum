@@ -2,6 +2,7 @@ const env = require("../../env");
 
 const { expect } = require("../chai.config");
 const { time } = require("@openzeppelin/test-helpers");
+const { makeUnixTime } = require("../utils/helpers/TimeHandler");
 const { BN } = require("../utils/helpers/BigNumber");
 const { hash } = require("../utils/helpers/Hasher");
 const { toWei } = require("../utils/helpers/WeiConverter");
@@ -10,7 +11,7 @@ const { makeCrowdsale } = require("../utils/factories/CrowdsaleFactory");
 
 contract("DeltaTokenCrowdsale", ([deployer, wallet, inv1, inv2, inv3]) => {
   const MINTER_ROLE = hash("MINTER_ROLE");
-  const options = { from: inv3, value: toWei(1) };
+  const options = { from: inv1, value: toWei(1) };
 
   const buyTokens = async (address, value) =>
     await this.crowdsale.sendTransaction({
@@ -19,12 +20,8 @@ contract("DeltaTokenCrowdsale", ([deployer, wallet, inv1, inv2, inv3]) => {
     });
 
   beforeEach(async () => {
-    const latestBlock = await web3.eth.getBlock("latest");
-
-    this.openingTime =
-      latestBlock.timestamp + time.duration.weeks(1).toNumber();
-    this.closingTime =
-      latestBlock.timestamp + time.duration.weeks(2).toNumber();
+    this.openingTime = await makeUnixTime("weeks", 1);
+    this.closingTime = await makeUnixTime("weeks", 2);
 
     this.token = await makeERC20Token();
     this.crowdsale = await makeCrowdsale(
@@ -34,6 +31,8 @@ contract("DeltaTokenCrowdsale", ([deployer, wallet, inv1, inv2, inv3]) => {
       this.closingTime
     );
 
+    await this.crowdsale.addWhitelisted(inv1, { from: deployer });
+    await this.crowdsale.addWhitelisted(inv2, { from: deployer });
     await this.token.grantRole(MINTER_ROLE, this.crowdsale.address, {
       from: deployer,
     });
@@ -232,6 +231,45 @@ contract("DeltaTokenCrowdsale", ([deployer, wallet, inv1, inv2, inv3]) => {
       it("should not allow a purchase when crowdsale has been closed", async () => {
         return expect(buyTokens(inv1, 1)).to.eventually.be.rejected;
       });
+    });
+  });
+
+  describe("Whitelist features:", () => {
+    beforeEach(async () => {
+      await time.increaseTo(this.openingTime + 1);
+    });
+
+    it("should return false if an address is not whitelisted", async () => {
+      return expect(await this.crowdsale.isWhitelisted(inv3)).to.be.false;
+    });
+
+    it("should return true if an address is whitelisted", async () => {
+      return expect(await this.crowdsale.isWhitelisted(inv2)).to.be.true;
+    });
+
+    it("should allow deployer (ADMIN) to add an address to whitelist", async () => {
+      await this.crowdsale.addWhitelisted(inv3, { from: deployer });
+      return expect(await this.crowdsale.isWhitelisted(inv3)).to.be.true;
+    });
+
+    it("should allow deployer (ADMIN) to remove an address from whitelist", async () => {
+      await this.crowdsale.removeWhitelisted(inv2, { from: deployer });
+      return expect(await this.crowdsale.isWhitelisted(inv2)).to.be.false;
+    });
+
+    it("should allow non-deployer address to add/remove an address from whitelist", async () => {
+      expect(this.crowdsale.addWhitelisted(inv2, { from: inv1 })).to.eventually
+        .be.rejected;
+      return expect(this.crowdsale.removeWhitelisted(inv2, { from: inv1 })).to
+        .eventually.be.rejected;
+    });
+
+    it("should allow an whitelisted address to purchase tokens", async () => {
+      return expect(buyTokens(inv1, 1)).to.be.fulfilled;
+    });
+
+    it("should not allow an non-whitelisted address to purchase tokens", async () => {
+      return expect(buyTokens(inv3, 1)).to.be.rejected;
     });
   });
 });
