@@ -5,6 +5,7 @@ import "../@openzeppelin/crowdsale/Crowdsale.sol";
 import "../@openzeppelin/crowdsale/MintedCrowdsale.sol";
 import "../@openzeppelin/crowdsale/CappedCrowdsale.sol";
 import "../@openzeppelin/crowdsale/TimedCrowdsale.sol";
+import "../@openzeppelin/crowdsale/WhitelistCrowdsale.sol";
 
 import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
@@ -13,7 +14,8 @@ contract DeltaTokenCrowdsale is
     Crowdsale,
     MintedCrowdsale,
     CappedCrowdsale,
-    TimedCrowdsale
+    TimedCrowdsale,
+    WhitelistCrowdsale
 {
     using SafeMath for uint256;
 
@@ -66,7 +68,7 @@ contract DeltaTokenCrowdsale is
     function _preValidatePurchase(address beneficiary, uint256 weiAmount)
         internal
         view
-        override(Crowdsale, CappedCrowdsale, TimedCrowdsale)
+        override(Crowdsale, CappedCrowdsale, TimedCrowdsale, WhitelistCrowdsale)
         onlyWhileOpen
     {
         super._preValidatePurchase(beneficiary, weiAmount);
