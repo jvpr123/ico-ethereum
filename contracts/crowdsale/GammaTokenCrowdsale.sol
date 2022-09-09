@@ -4,10 +4,17 @@ pragma solidity ^0.8.15;
 import "../@openzeppelin/crowdsale/Crowdsale.sol";
 import "../@openzeppelin/crowdsale/MintedCrowdsale.sol";
 import "../@openzeppelin/crowdsale/CappedCrowdsale.sol";
+import "../@openzeppelin/crowdsale/TimedCrowdsale.sol";
+
 import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract GammaTokenCrowdsale is Crowdsale, MintedCrowdsale, CappedCrowdsale {
+contract GammaTokenCrowdsale is
+    Crowdsale,
+    MintedCrowdsale,
+    CappedCrowdsale,
+    TimedCrowdsale
+{
     using SafeMath for uint256;
 
     uint256 public _minIndividualCap;
@@ -21,8 +28,14 @@ contract GammaTokenCrowdsale is Crowdsale, MintedCrowdsale, CappedCrowdsale {
         uint256 cap_,
         uint256 minIndividualCap_,
         uint256 maxIndividualCap_,
+        uint256 openingTime_,
+        uint256 closingTime_,
         ERC20PresetMinterPauser token_
-    ) MintedCrowdsale(rate_, wallet_, token_) CappedCrowdsale(cap_) {
+    )
+        MintedCrowdsale(rate_, wallet_, token_)
+        CappedCrowdsale(cap_)
+        TimedCrowdsale(openingTime_, closingTime_)
+    {
         _minIndividualCap = minIndividualCap_;
         _maxIndividualCap = maxIndividualCap_;
     }
@@ -53,7 +66,8 @@ contract GammaTokenCrowdsale is Crowdsale, MintedCrowdsale, CappedCrowdsale {
     function _preValidatePurchase(address beneficiary, uint256 weiAmount)
         internal
         view
-        override(Crowdsale, CappedCrowdsale)
+        override(Crowdsale, CappedCrowdsale, TimedCrowdsale)
+        onlyWhileOpen
     {
         super._preValidatePurchase(beneficiary, weiAmount);
 
