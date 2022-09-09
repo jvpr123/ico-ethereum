@@ -5,15 +5,17 @@ import "../@openzeppelin/crowdsale/Crowdsale.sol";
 import "../@openzeppelin/crowdsale/MintedCrowdsale.sol";
 import "../@openzeppelin/crowdsale/CappedCrowdsale.sol";
 import "../@openzeppelin/crowdsale/TimedCrowdsale.sol";
+import "../@openzeppelin/crowdsale/WhitelistCrowdsale.sol";
 
 import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract GammaTokenCrowdsale is
+contract DeltaTokenCrowdsale is
     Crowdsale,
     MintedCrowdsale,
     CappedCrowdsale,
-    TimedCrowdsale
+    TimedCrowdsale,
+    WhitelistCrowdsale
 {
     using SafeMath for uint256;
 
@@ -66,18 +68,18 @@ contract GammaTokenCrowdsale is
     function _preValidatePurchase(address beneficiary, uint256 weiAmount)
         internal
         view
-        override(Crowdsale, CappedCrowdsale, TimedCrowdsale)
+        override(Crowdsale, CappedCrowdsale, TimedCrowdsale, WhitelistCrowdsale)
         onlyWhileOpen
     {
         super._preValidatePurchase(beneficiary, weiAmount);
 
         require(
             _contributions[beneficiary].add(weiAmount) >= _minIndividualCap,
-            "GammaTokenCrowdsale: Contribution value is lower then minimum allowed"
+            "DeltaTokenCrowdsale: Contribution value is lower then minimum allowed"
         );
         require(
             _contributions[beneficiary].add(weiAmount) <= _maxIndividualCap,
-            "GammaTokenCrowdsale: Contribution value is greater then maximum allowed"
+            "DeltaTokenCrowdsale: Contribution value is greater then maximum allowed"
         );
     }
 

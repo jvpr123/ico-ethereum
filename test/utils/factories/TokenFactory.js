@@ -1,4 +1,4 @@
-const Token = artifacts.require("GammaToken.sol");
+const Token = artifacts.require("DeltaToken.sol");
 const env = require("../../../env");
 
 const makeERC20Token = async () =>
