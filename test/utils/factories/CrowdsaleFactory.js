@@ -1,4 +1,4 @@
-const Crowdsale = artifacts.require("GammaTokenCrowdsale.sol");
+const Crowdsale = artifacts.require("DeltaTokenCrowdsale.sol");
 const env = require("../../../env");
 
 const makeCrowdsale = async (token, wallet, openingTime, closingTime) =>

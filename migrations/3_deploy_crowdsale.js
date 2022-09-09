@@ -1,5 +1,5 @@
-const GammaToken = artifacts.require("GammaToken.sol");
-const GammaTokenCrowdsale = artifacts.require("GammaTokenCrowdsale.sol");
+const DeltaToken = artifacts.require("DeltaToken.sol");
+const DeltaTokenCrowdsale = artifacts.require("DeltaTokenCrowdsale.sol");
 
 const env = require("../env");
 
@@ -8,7 +8,7 @@ module.exports = async (deployer) => {
 
   try {
     await deployer.deploy(
-      GammaTokenCrowdsale,
+      DeltaTokenCrowdsale,
       env.TOKEN_RATE,
       wallet,
       env.TOKEN_CAP,
@@ -16,7 +16,7 @@ module.exports = async (deployer) => {
       env.INDIVIDUAL_MAX_CAP,
       env.CROWDSALE_OPENING_TIME,
       env.CROWDSALE_CLOSING_TIME,
-      GammaToken.address
+      DeltaToken.address
     );
   } catch (error) {
     console.log(error);

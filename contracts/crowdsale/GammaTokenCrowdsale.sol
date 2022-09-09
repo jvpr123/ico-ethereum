@@ -9,7 +9,7 @@ import "../@openzeppelin/crowdsale/TimedCrowdsale.sol";
 import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract GammaTokenCrowdsale is
+contract DeltaTokenCrowdsale is
     Crowdsale,
     MintedCrowdsale,
     CappedCrowdsale,
@@ -73,11 +73,11 @@ contract GammaTokenCrowdsale is
 
         require(
             _contributions[beneficiary].add(weiAmount) >= _minIndividualCap,
-            "GammaTokenCrowdsale: Contribution value is lower then minimum allowed"
+            "DeltaTokenCrowdsale: Contribution value is lower then minimum allowed"
         );
         require(
             _contributions[beneficiary].add(weiAmount) <= _maxIndividualCap,
-            "GammaTokenCrowdsale: Contribution value is greater then maximum allowed"
+            "DeltaTokenCrowdsale: Contribution value is greater then maximum allowed"
         );
     }
 

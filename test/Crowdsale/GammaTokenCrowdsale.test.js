@@ -8,7 +8,7 @@ const { toWei } = require("../utils/helpers/WeiConverter");
 const { makeERC20Token } = require("../utils/factories/TokenFactory");
 const { makeCrowdsale } = require("../utils/factories/CrowdsaleFactory");
 
-contract("GammaTokenCrowdsale", ([deployer, wallet, inv1, inv2, inv3]) => {
+contract("DeltaTokenCrowdsale", ([deployer, wallet, inv1, inv2, inv3]) => {
   const MINTER_ROLE = hash("MINTER_ROLE");
   const options = { from: inv3, value: toWei(1) };
 

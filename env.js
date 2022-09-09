@@ -3,8 +3,8 @@ const { BN } = require("./test/utils/helpers/BigNumber");
 const { toWei } = require("./test/utils//helpers/WeiConverter");
 
 module.exports = {
-  TOKEN_NAME: "Gamma Token",
-  TOKEN_SYMBOL: "GMT",
+  TOKEN_NAME: "Delta Token",
+  TOKEN_SYMBOL: "DLT",
   TOKEN_DECIMALS: BN(18),
   TOKEN_RATE: BN(1),
   TOKEN_CAP: toWei(200),
