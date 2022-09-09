@@ -6,7 +6,7 @@ const { hash } = require("../utils/helpers/Hasher");
 const { makeERC20Token } = require("../utils/factories/TokenFactory");
 const { makeCrowdsale } = require("../utils/factories/CrowdsaleFactory");
 
-contract("Delta Token", ([deployer, wallet, investor]) => {
+contract("Lambda Token", ([deployer, wallet, investor]) => {
   const options = { from: deployer };
 
   const DEFAULT_ADMIN_ROLE = "0X00";
